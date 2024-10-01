@@ -4,7 +4,9 @@
 FROM mcr.microsoft.com/windows/servercore:20H2
 
 # Install Chocolatey
-RUN powershell -NoProfile -ExecutionPolicy Bypass -Command "(iex ((New-Object Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))) >$null 2>&1"
+RUN powershell -NoProfile -ExecutionPolicy Bypass -Command " \
+    [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12; \
+    (iex ((New-Object Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))) >$null 2>&1"
 
 # Install Git and other dependencies
 RUN choco install git -y
@@ -12,10 +14,10 @@ RUN choco install cmake --pre --installargs 'ADD_CMAKE_TO_PATH=System' -y
 RUN choco install nuget.commandline -y
 
 # Install Visual Studio Build Tools
-RUN powershell -NoProfile -Command " \
-    Invoke-WebRequest -Uri 'https://aka.ms/vs/17/release/vs_buildtools.exe' -OutFile 'vs_buildtools.exe'; \
-    Start-Process 'vs_buildtools.exe' -ArgumentList '--quiet', '--wait', '--norestart', '--nocache', '--installPath', 'C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools', '--add', 'Microsoft.VisualStudio.Workload.VCTools', '--includeRecommended' -NoNewWindow -Wait; \
-    Remove-Item 'vs_buildtools.exe' -Force"
+RUN powershell -NoProfile -ExecutionPolicy Bypass -Command " \
+    Invoke-WebRequest -Uri 'https://aka.ms/vs/17/release/vs_buildtools.exe' -OutFile 'C:\vs_buildtools.exe'; \
+    Start-Process 'C:\vs_buildtools.exe' -ArgumentList '--quiet', '--wait', '--norestart', '--nocache', '--installPath', 'C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools', '--add', 'Microsoft.VisualStudio.Workload.VCTools', '--includeRecommended' -NoNewWindow -Wait; \
+    Remove-Item 'C:\vs_buildtools.exe' -Force"
 
 # Install MinGW
 RUN choco install mingw -y
