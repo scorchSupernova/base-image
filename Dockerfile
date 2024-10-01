@@ -7,10 +7,11 @@ RUN @powershell -NoProfile -ExecutionPolicy unrestricted -Command "(iex ((new-ob
 
 
 # Install Git, CMake, NuGet, and MinGW
-RUN choco install git -y; \
+RUN powershell -NoProfile -Command " \
+    choco install git -y; \
     choco install cmake --pre --installargs 'ADD_CMAKE_TO_PATH=System' -y; \
     choco install nuget.commandline -y; \
-    choco install mingw -y
+    choco install mingw -y"
 
 # Install Visual Studio Build Tools
 RUN powershell -NoProfile -ExecutionPolicy Bypass -Command " \
