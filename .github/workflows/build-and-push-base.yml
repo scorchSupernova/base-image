@@ -1,0 +1,23 @@
+name: Build and Push Base Windows C++ Image
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
+
+      - name: Build Base Docker Image
+        run: docker build -t scorchSupernova/my-base-windows-cpp-image:latest .
+
+      - name: Push Base Docker Image
+        run: docker push scorchSupernova/my-base-windows-cpp-image:latest
