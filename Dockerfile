@@ -1,5 +1,6 @@
 # escape=`
-# Use a Windows Server Core base image
+
+# Base Image with Dependencies
 FROM mcr.microsoft.com/windows/servercore:20H2
 
 # Install Chocolatey
@@ -11,11 +12,10 @@ RUN choco install cmake --pre --installargs 'ADD_CMAKE_TO_PATH=System' -y
 RUN choco install nuget.commandline -y
 
 # Install Visual Studio Build Tools
-RUN curl -SL --output vs_buildtools.exe https://aka.ms/vs/17/release/vs_buildtools.exe ^
-    && start /w vs_buildtools.exe --quiet --wait --norestart --nocache ^
-        --installPath "%ProgramFiles(x86)%\Microsoft Visual Studio\2022\BuildTools" ^
-        --add Microsoft.VisualStudio.Workload.VCTools --includeRecommended ^
-    && del /q vs_buildtools.exe
+RUN powershell -Command " \
+    Invoke-WebRequest -Uri 'https://aka.ms/vs/17/release/vs_buildtools.exe' -OutFile 'vs_buildtools.exe'; \
+    Start-Process 'vs_buildtools.exe' -ArgumentList '--quiet', '--wait', '--norestart', '--nocache', '--installPath', 'C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools', '--add', 'Microsoft.VisualStudio.Workload.VCTools', '--includeRecommended' -NoNewWindow -Wait; \
+    Remove-Item 'vs_buildtools.exe' -Force"
 
 # Install MinGW
 RUN choco install mingw -y
@@ -30,4 +30,3 @@ ENV PATH="${PATH};C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools
 
 # Final command to keep the container running (optional)
 CMD ["cmd.exe"]
-
