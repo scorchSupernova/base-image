@@ -47,4 +47,4 @@ RUN msbuild -version
 # Install NuGet and related packages
 RUN choco install nuget.commandline -y
 
-CMD["cmd.exe"]
+CMD ["cmd.exe"]
