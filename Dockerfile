@@ -1,7 +1,6 @@
 # escape=`
 
-FROM mcr.microsoft.com/windows/servercore:20H2
-
+FROM mcr.microsoft.com/windows/servercore:ltsc2022
 # Install Chocolatey
 RUN @powershell -NoProfile -ExecutionPolicy unrestricted -Command "(iex ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))) >$null 2>&1"
 
