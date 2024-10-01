@@ -4,7 +4,7 @@ FROM mcr.microsoft.com/windows/servercore:20H2
 
 # Install Chocolatey
 RUN powershell -NoProfile -ExecutionPolicy Bypass -Command " \
-    (iex ((New-Object Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))) >$null 2>&1"
+    iex ((New-Object Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))"
 
 # Install Git, CMake, NuGet, and MinGW
 RUN choco install git -y; \
