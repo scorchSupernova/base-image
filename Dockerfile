@@ -12,7 +12,7 @@ RUN choco install cmake --pre --installargs 'ADD_CMAKE_TO_PATH=System' -y
 RUN choco install nuget.commandline -y
 
 # Install Visual Studio Build Tools
-RUN powershell -Command " \
+RUN powershell -NoProfile -Command " \
     Invoke-WebRequest -Uri 'https://aka.ms/vs/17/release/vs_buildtools.exe' -OutFile 'vs_buildtools.exe'; \
     Start-Process 'vs_buildtools.exe' -ArgumentList '--quiet', '--wait', '--norestart', '--nocache', '--installPath', 'C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools', '--add', 'Microsoft.VisualStudio.Workload.VCTools', '--includeRecommended' -NoNewWindow -Wait; \
     Remove-Item 'vs_buildtools.exe' -Force"
