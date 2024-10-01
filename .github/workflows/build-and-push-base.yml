@@ -1,6 +1,7 @@
 name: Build and Push Base Windows C++ Image
 
 on:
+  workflow_call:
   push:
     branches:
       - main
