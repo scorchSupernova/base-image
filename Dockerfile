@@ -13,11 +13,20 @@ RUN choco install git -y
 RUN choco install cmake --pre --installargs 'ADD_CMAKE_TO_PATH=System' -y
 RUN choco install nuget.commandline -y
 
-# Install Visual Studio Build Tools
-RUN powershell -NoProfile -ExecutionPolicy Bypass -Command " \
-    Invoke-WebRequest -Uri 'https://aka.ms/vs/17/release/vs_buildtools.exe' -OutFile 'C:\vs_buildtools.exe'; \
-    Start-Process 'C:\vs_buildtools.exe' -ArgumentList '--quiet', '--wait', '--norestart', '--nocache', '--installPath', 'C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools', '--add', 'Microsoft.VisualStudio.Workload.VCTools', '--includeRecommended' -NoNewWindow -Wait; \
-    Remove-Item 'C:\vs_buildtools.exe' -Force"
+RUN `
+    curl -SL --output vs_buildtools.exe https://aka.ms/vs/17/release/vs_buildtools.exe `
+    && (start /w vs_buildtools.exe --quiet --wait --norestart --nocache `
+        --installPath "%ProgramFiles(x86)%\Microsoft Visual Studio\2022\BuildTools" `
+        --add Microsoft.VisualStudio.Workload.AzureBuildTools `
+        --add Microsoft.VisualStudio.Workload.MSBuildTools `
+        --add Microsoft.VisualStudio.Component.VC.ATLMFC `
+        --add Microsoft.VisualStudio.Workload.VCTools --includeRecommended `
+        --remove Microsoft.VisualStudio.Component.Windows10SDK.10240 `
+        --remove Microsoft.VisualStudio.Component.Windows10SDK.10586 `
+        --remove Microsoft.VisualStudio.Component.Windows10SDK.14393 `
+        --remove Microsoft.VisualStudio.Component.Windows81SDK `
+        || IF "%ERRORLEVEL%"=="3010" EXIT 0) `
+    && del /q vs_buildtools.exe
 
 # Install MinGW
 RUN choco install mingw -y
