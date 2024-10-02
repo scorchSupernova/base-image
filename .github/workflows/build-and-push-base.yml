@@ -29,7 +29,8 @@ jobs:
       # set up docker buildx
       - name: Set up Docker Buildx
         run: |
-          docker buildx create --use || true
+          docker buildx create --name mybuilder || true
+          docker buildx use mybuilder
           docker buildx inspect --boostrap
 
       - name: Build Base Docker Image
