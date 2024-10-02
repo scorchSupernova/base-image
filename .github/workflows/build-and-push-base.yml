@@ -26,10 +26,15 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-docker-
 
+      # set up docker buildx
+      - name: Set up Docker Buildx
+        run: |
+          docker buildx create --name testbuilder --use
+          docker buildx inspect testbuilder --boostrap
+
       - name: Build Base Docker Image
         run: |
-          docker buildx create --use
-          docker buildx build --cache-to=type=local, des=/tmp/.buildx-cache --tag saidursajol/my-base-windows-cpp-image:latest .
+          docker buildx build --cache-to=type=local,dest=/tmp/.buildx-cache --tag saidursajol/my-base-windows-cpp-image:latest --push .
 
       - name: Push Base Docker Image
         run: docker push saidursajol/my-base-windows-cpp-image:latest
