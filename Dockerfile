@@ -33,5 +33,19 @@ RUN C:\vcpkg\bootstrap-vcpkg.bat
 ENV VCPKG_ROOT=C:\vcpkg
 ENV PATH="${PATH};C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.38.33130\bin\Hostx64\x64;C:\ProgramData\mingw64\mingw64\bin"
 
+# Copy vcpkg.json and install dependencies using vcpkg manifest mode
+COPY install_package.cpp  ./
+COPY generate_package_json.cpp  ./
+RUN g++ install_package.cpp -o install-package
+RUN .\install-package.exe
+# COPY vcpkg.json C:\vcpkg.json
+RUN .\vcpkg\vcpkg install --triplet x64-windows --feature-flags=manifests
+
+# Update PATH environment variable for Visual Studio and MSBuild tools
+RUN refreshenv
+
+# Integrate vcpkg with MSBuild
+RUN .\vcpkg\vcpkg integrate install
+
 # Final command to keep the container running (optional)
 CMD ["cmd.exe"]
