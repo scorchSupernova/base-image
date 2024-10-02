@@ -9,10 +9,7 @@ RUN @powershell -NoProfile -ExecutionPolicy unrestricted -Command "(iex ((new-ob
 RUN choco install git -y
 
 # Check if vcpkg folder exists, clone if it does not
-RUN if (-Not (Test-Path 'C:\vcpkg')) { `
-        git clone https://github.com/microsoft/vcpkg C:\vcpkg; `
-        C:\vcpkg\bootstrap-vcpkg.bat; `
-    }
+RUN if not exists C:\vcpkg ( git clone https://github.com/microsoft/vcpkg C:\vcpkg && C:\vcpkg\bootstrap-vcpkg.bat)
 
 # Install Visual Studio Build Tools
 RUN `
