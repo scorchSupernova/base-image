@@ -15,7 +15,7 @@ RUN .\vcpkg\bootstrap-vcpkg.bat
 # Install Visual Studio Build Tools
 RUN `
     curl -SL --output vs_buildtools.exe https://aka.ms/vs/17/release/vs_buildtools.exe `
-    && (start /w vs_buildtools.exe --quiet --wait --norestart --nocache `
+    && (start /w vs_buildtools.exe --quiet --wait --norestart `
         --installPath "%ProgramFiles(x86)%\Microsoft Visual Studio\2022\BuildTools" `
         --add Microsoft.VisualStudio.Workload.AzureBuildTools `
         --add Microsoft.VisualStudio.Workload.MSBuildTools `
