@@ -34,7 +34,6 @@ RUN choco install mingw -y
 RUN choco install cmake --pre --installargs 'ADD_CMAKE_TO_PATH=System' -y
 
 # Install NuGet
-RUN choco install nuget.commandline -y
 
 # Set the environment variables for vcpkg
 ENV VCPKG_ROOT=C:\vcpkg
@@ -53,4 +52,3 @@ RUN .\vcpkg\vcpkg install --triplet x64-windows --feature-flags=manifests
 RUN .\vcpkg\vcpkg integrate install
 
 # Final command to keep the container running (optional)
-CMD ["cmd.exe"]
