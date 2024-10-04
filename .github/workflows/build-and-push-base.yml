@@ -16,19 +16,19 @@ jobs:
 
       - name: Log in to Docker Hub
         run: echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
-      
-      # cache docker layers
-      - name: Cache Docker Layers
+
+      # Cache Docker layers
+      - name: Cache Docker layers
         uses: actions/cache@v3
         with:
-          path: ~/.cache/docker
+          path: /tmp/.buildx-cache  # Adjust if necessary
           key: ${{ runner.os }}-docker-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-docker-
-
+            
       - name: Build Base Docker Image
         run: |
-          docker build --tag saidursajol/my-base-windows-cpp-image:latest .
+          docker build --no-cache --tag saidursajol/my-base-windows-cpp-image:latest .
 
       - name: Push Base Docker Image
         run: docker push saidursajol/my-base-windows-cpp-image:latest
