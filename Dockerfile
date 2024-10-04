@@ -17,15 +17,14 @@ RUN powershell -Command "C:\vcpkg\bootstrap-vcpkg.bat"
 
 # Install Visual Studio Build Tools
 RUN powershell -Command `
-    curl -SL --output vs_buildtools.exe https://aka.ms/vs/17/release/vs_buildtools.exe `
-    && (start /w vs_buildtools.exe --quiet --wait --norestart --nocache `
-        --installPath '%ProgramFiles(x86)%\Microsoft Visual Studio\2022\BuildTools' `
-        --add Microsoft.VisualStudio.Workload.AzureBuildTools `
-        --add Microsoft.VisualStudio.Workload.MSBuildTools `
-        --add Microsoft.VisualStudio.Component.VC.ATLMFC `
-        --add Microsoft.VisualStudio.Workload.VCTools --includeRecommended `
-        || IF "%ERRORLEVEL%"=="3010" EXIT 0) `
-    && del /q vs_buildtools.exe
+    curl -SL --output vs_buildtools.exe https://aka.ms/vs/17/release/vs_buildtools.exe; `
+    Start-Process vs_buildtools.exe -ArgumentList '--quiet', '--wait', '--norestart', '--nocache', `
+        '--installPath "C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools"', `
+        '--add Microsoft.VisualStudio.Workload.AzureBuildTools', `
+        '--add Microsoft.VisualStudio.Workload.MSBuildTools', `
+        '--add Microsoft.VisualStudio.Component.VC.ATLMFC', `
+        '--add Microsoft.VisualStudio.Workload.VCTools --includeRecommended' -NoNewWindow -Wait; `
+    Remove-Item vs_buildtools.exe -Force
 
 # Update PATH environment variable for Visual Studio
 RUN powershell -Command `
