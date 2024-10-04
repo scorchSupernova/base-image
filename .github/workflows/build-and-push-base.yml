@@ -28,7 +28,7 @@ jobs:
             
       - name: Build Base Docker Image
         run: |
-          docker build --no-cache --tag saidursajol/my-base-windows-cpp-image:1.0 .
+          docker build --tag saidursajol/my-base-windows-cpp-image:1.0 .
 
       - name: Push Base Docker Image
         run: docker push saidursajol/my-base-windows-cpp-image:1.0
