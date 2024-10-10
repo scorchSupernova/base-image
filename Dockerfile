@@ -1,6 +1,6 @@
 # escape=`
 
-FROM mcr.microsoft.com/windows/servercore:20H2
+FROM mcr.microsoft.com/windows/servercore:ltsc2022
 
 
 # Install Chocolatey
