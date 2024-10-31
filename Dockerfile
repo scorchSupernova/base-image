@@ -1,6 +1,6 @@
 # escape=`
 
-FROM lala-mt5-sdk:latest
+FROM saidursajol/lala-mt5-sdk:latest
 
 # Install Chocolatey
 RUN powershell -NoProfile -ExecutionPolicy Bypass -Command "(iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))) > $null 2>&1"
